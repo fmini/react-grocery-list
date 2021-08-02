@@ -1,4 +1,4 @@
-// added AddItem import line 3 and AddItem component line 44
+// added newItem, setNewItem state line 26, handleSubmit function line 42, AddItem props lines 54-56
 import Header from './Header';
 import AddItem from './AddItem';
 import Content from './Content';
@@ -23,6 +23,7 @@ function App() {
       item: 'item 3',
     },
   ]);
+  const [newItem, setNewItem] = useState('');
 
   const handleCheck = id => {
     const listItems = items.map(item =>
@@ -38,10 +39,22 @@ function App() {
     localStorage.setItem('shoppinglist', JSON.stringify(listItems));
   };
 
+  const handleSubmit = e => {
+    e.preventDefault();
+    if (!newItem) return;
+    console.log(newItem);
+    // addItem
+    setNewItem('');
+  };
+
   return (
     <div className="App">
       <Header title="Grocery List" />
-      <AddItem />
+      <AddItem
+        newItem={newItem}
+        setNewItem={setNewItem}
+        handleSubmit={handleSubmit}
+      />
       <Content
         items={items}
         handleCheck={handleCheck}
