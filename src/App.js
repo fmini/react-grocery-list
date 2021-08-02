@@ -1,11 +1,9 @@
 import Header from './Header';
 import Content from './Content';
 import Footer from './Footer';
-// moved useState from Content.js
 import { useState } from 'react';
 
 function App() {
-  /* Moved items, setItems, default content, and handlers from Content.js */
   const [items, setItems] = useState([
     {
       id: 1,
@@ -40,7 +38,6 @@ function App() {
 
   return (
     <div className="App">
-      {/* Added props to pass to Header, Content, and Footer */}
       <Header title="Grocery List" />
       <Content
         items={items}

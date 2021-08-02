@@ -1,5 +1,5 @@
 import React from 'react';
-// added title prop from App.js
+
 const Header = ({ title }) => {
   return (
     <header>
@@ -7,7 +7,7 @@ const Header = ({ title }) => {
     </header>
   );
 };
-// Added default prop in case title not passed via props
+
 Header.defaultProps = {
   title: 'Default Title',
 };
