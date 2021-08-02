@@ -1,12 +1,15 @@
-//rafce snippet will create the react arrow function component
 import React from 'react';
-
-const Header = () => {
+// added title prop from App.js
+const Header = ({ title }) => {
   return (
     <header>
-      <h1>Grocery List</h1>
+      <h1>{title}</h1>
     </header>
   );
+};
+// Added default prop in case title not passed via props
+Header.defaultProps = {
+  title: 'Default Title',
 };
 
 export default Header;

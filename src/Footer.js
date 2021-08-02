@@ -1,10 +1,12 @@
 import React from 'react';
-
-const Footer = () => {
-  const today = new Date();
+// passed in props.length from App.js to use below
+const Footer = ({ length }) => {
   return (
     <footer>
-      <p>Copyright &copy; {today.getFullYear()}</p>
+      {/* added the paragraph below to show how many items in the list using props.length */}
+      <p>
+        You have {length} {length === 1 ? 'item' : 'items'}
+      </p>
     </footer>
   );
 };
