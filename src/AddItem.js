@@ -1,4 +1,4 @@
-// added props line 4, onSubmit line 6, value and onChange lines 13 & 14
+//
 import { FaPlus } from 'react-icons/fa';
 
 const AddItem = ({ newItem, setNewItem, handleSubmit }) => {

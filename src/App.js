@@ -1,4 +1,4 @@
-// added newItem, setNewItem state line 26, handleSubmit function line 42, AddItem props lines 54-56
+// changed the default state from a static array to pull state from local storage lines 9, 10
 import Header from './Header';
 import AddItem from './AddItem';
 import Content from './Content';
@@ -6,44 +6,39 @@ import Footer from './Footer';
 import { useState } from 'react';
 
 function App() {
-  const [items, setItems] = useState([
-    {
-      id: 1,
-      checked: true,
-      item: 'One half pound bag of Cocao Covered Almonds Unsalted',
-    },
-    {
-      id: 2,
-      checked: false,
-      item: 'item 2',
-    },
-    {
-      id: 3,
-      checked: false,
-      item: 'item 3',
-    },
-  ]);
+  const [items, setItems] = useState(
+    JSON.parse(localStorage.getItem('shoppinglist'))
+  );
   const [newItem, setNewItem] = useState('');
+
+  const setAndSaveItems = newItems => {
+    setItems(newItems);
+    localStorage.setItem('shoppinglist', JSON.stringify(newItems));
+  };
+
+  const addItem = item => {
+    const id = items.length ? items[items.length - 1].id + 1 : 1;
+    const myNewItem = { id, checked: false, item };
+    const listItems = [...items, myNewItem];
+    setAndSaveItems(listItems);
+  };
 
   const handleCheck = id => {
     const listItems = items.map(item =>
       item.id === id ? { ...item, checked: !item.checked } : item
     );
-    setItems(listItems);
-    localStorage.setItem('shoppinglist', JSON.stringify(listItems));
+    setAndSaveItems(listItems);
   };
 
   const handleDelete = id => {
     const listItems = items.filter(item => item.id !== id);
-    setItems(listItems);
-    localStorage.setItem('shoppinglist', JSON.stringify(listItems));
+    setAndSaveItems(listItems);
   };
 
   const handleSubmit = e => {
     e.preventDefault();
     if (!newItem) return;
-    console.log(newItem);
-    // addItem
+    addItem(newItem);
     setNewItem('');
   };
 
