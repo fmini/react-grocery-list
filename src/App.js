@@ -1,40 +1,39 @@
-// imported SearchItem line 3, added SearchItem component line 55 and updated Content to use filter to display items meeting the search
+// import useEffect (7) added useEffect hook (16) added empty array short ciricuit (11) removed  setItem from deleted setAndSaveItems function and added in useEffect (17) changed call from setAndSaveItems to setItems (24, 31, 36)
 import Header from './Header';
 import SearchItem from './SearchItem';
 import AddItem from './AddItem';
 import Content from './Content';
 import Footer from './Footer';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function App() {
   const [items, setItems] = useState(
-    JSON.parse(localStorage.getItem('shoppinglist'))
+    JSON.parse(localStorage.getItem('shoppinglist')) || []
   );
   const [newItem, setNewItem] = useState('');
   const [search, setSearch] = useState('');
 
-  const setAndSaveItems = newItems => {
-    setItems(newItems);
-    localStorage.setItem('shoppinglist', JSON.stringify(newItems));
-  };
+  useEffect(() => {
+    localStorage.setItem('shoppinglist', JSON.stringify(items));
+  }, [items]);
 
   const addItem = item => {
     const id = items.length ? items[items.length - 1].id + 1 : 1;
     const myNewItem = { id, checked: false, item };
     const listItems = [...items, myNewItem];
-    setAndSaveItems(listItems);
+    setItems(listItems);
   };
 
   const handleCheck = id => {
     const listItems = items.map(item =>
       item.id === id ? { ...item, checked: !item.checked } : item
     );
-    setAndSaveItems(listItems);
+    setItems(listItems);
   };
 
   const handleDelete = id => {
     const listItems = items.filter(item => item.id !== id);
-    setAndSaveItems(listItems);
+    setItems(listItems);
   };
 
   const handleSubmit = e => {
