@@ -1,10 +1,11 @@
-// added API URL (10) stopped using local storage for items useState and load empty array (12), setState for fetchError and isLoading (15, 16), refactored useEffect to only run once at load and fetch items from JSON server URL while checking for errors and stopping the isLoading when complete (19-33), added loading msg (71), error msg (72) and conditinally load data after loading and no error (73) in jsx
+// imported apiRequest (8) made CRUD functions async to await api results (36, 53, 72), set options for and called apiRequest for all CRUD ops (42-50, 59-69, 76-79)
 import Header from './Header';
 import SearchItem from './SearchItem';
 import AddItem from './AddItem';
 import Content from './Content';
 import Footer from './Footer';
 import { useState, useEffect } from 'react';
+import apiRequest from './apiRequest';
 
 function App() {
   const API_URL = 'http://localhost:3500/items';
@@ -32,23 +33,50 @@ function App() {
     fetchItems();
   }, []);
 
-  const addItem = item => {
+  const addItem = async item => {
     const id = items.length ? items[items.length - 1].id + 1 : 1;
     const myNewItem = { id, checked: false, item };
     const listItems = [...items, myNewItem];
     setItems(listItems);
+
+    const postOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(myNewItem),
+    };
+    const result = await apiRequest(API_URL, postOptions);
+    if (result) setFetchError(result);
   };
 
-  const handleCheck = id => {
+  const handleCheck = async id => {
     const listItems = items.map(item =>
       item.id === id ? { ...item, checked: !item.checked } : item
     );
     setItems(listItems);
+
+    const myItem = listItems.filter(item => item.id === id);
+    const updateOptions = {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ checked: myItem[0].checked }),
+    };
+    const reqUrl = `${API_URL}/${id}`;
+    const result = await apiRequest(reqUrl, updateOptions);
+    if (result) setFetchError(result);
   };
 
-  const handleDelete = id => {
+  const handleDelete = async id => {
     const listItems = items.filter(item => item.id !== id);
     setItems(listItems);
+
+    const deleteOptions = { method: 'DELETE' };
+    const reqUrl = `${API_URL}/${id}`;
+    const result = await apiRequest(reqUrl, deleteOptions);
+    if (result) setFetchError(result);
   };
 
   const handleSubmit = e => {
